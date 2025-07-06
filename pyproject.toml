@@ -3,7 +3,7 @@ name            = "cgcnn2"
 version         = "0.4.7"
 description     = "Reproduction of Crystal Graph Convolutional Neural Networks"
 readme          = "README.md"
-requires-python = ">=3.11,<3.13"
+requires-python = ">=3.8"
 authors         = [{ name = "Jiacheng Wang", email = "jiachengwang@umass.edu" },]
 maintainers     = [{ name = "Jiacheng Wang", email = "jiachengwang@umass.edu" },]
 license         = { text = "MIT" }
