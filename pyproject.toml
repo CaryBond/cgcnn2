@@ -22,7 +22,7 @@ dependencies = [
   "matplotlib",
   "numpy",
   "pandas",
-  "pymatgen>=2025.1.9",
+  "pymatgen>=2024.1.0",
   "torch>=2.2.0",
 ]
 # pymatgen tracks the first release of the current year
