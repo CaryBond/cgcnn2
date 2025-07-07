@@ -132,8 +132,7 @@ class CrystalGraphConvNet(nn.Module):
         atom_fea: torch.Tensor,
         nbr_fea: torch.Tensor,
         nbr_fea_idx: torch.LongTensor,
-        crystal_atom_idx: list[torch.LongTensor],
-        return_nbr_filter=False
+        crystal_atom_idx: list[torch.LongTensor]
     ):
         """
         Forward pass
@@ -170,10 +169,7 @@ class CrystalGraphConvNet(nn.Module):
         out = self.fc_out(crys_fea)
         if self.classification:
             out = self.logsoftmax(out)
-        if return_nbr_filter:
-            return out, crys_fea, nbr_filter   # new added
-        else:
-            return out, crys_fea
+        return out, crys_fea
 
     def pooling(
         self, atom_fea: torch.Tensor, crystal_atom_idx: list[torch.LongTensor]
