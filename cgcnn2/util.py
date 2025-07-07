@@ -339,6 +339,7 @@ def cgcnn_descriptor(
     loader: torch.utils.data.DataLoader,
     device: str,
     verbose: int,
+    return_nbr_filter_list=False
 ) -> tuple[list[float], list[torch.Tensor]]:
     """
     This function takes a pre-trained CGCNN model and a dataset, runs inference
@@ -368,6 +369,7 @@ def cgcnn_descriptor(
     targets_list = []
     outputs_list = []
     crys_feas_list = []
+    nbr_filters_list = []
     index = 0
 
     with torch.inference_mode():
@@ -379,11 +381,12 @@ def cgcnn_descriptor(
             crystal_atom_idx = [idx_map.to(device) for idx_map in crystal_atom_idx]
             target = target.to(device)
 
-            output, crys_fea = model(atom_fea, nbr_fea, nbr_fea_idx, crystal_atom_idx)
+            output, crys_fea, nbr_filter = model(atom_fea, nbr_fea, nbr_fea_idx, crystal_atom_idx)
 
             targets_list.extend(target.cpu().numpy().ravel().tolist())
             outputs_list.extend(output.cpu().numpy().ravel().tolist())
             crys_feas_list.append(crys_fea.cpu().numpy())
+            nbr_filters_list.append(nbr_filter.cpu().numpy())
 
             index += 1
 
@@ -395,8 +398,10 @@ def cgcnn_descriptor(
                 logging.info(
                     f"index: {index} | cif id: {cif_id_value} | prediction: {prediction_value}"
                 )
-
-    return outputs_list, crys_feas_list
+    if return_nbr_filter_list:
+        return outputs_list, crys_feas_list, nbr_filters_list
+    else:
+        return outputs_list, crys_feas_list
 
 
 def cgcnn_pred(
