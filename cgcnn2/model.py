@@ -133,6 +133,7 @@ class CrystalGraphConvNet(nn.Module):
         nbr_fea: torch.Tensor,
         nbr_fea_idx: torch.LongTensor,
         crystal_atom_idx: list[torch.LongTensor],
+        return_nbr_filter=False
     ):
         """
         Forward pass
