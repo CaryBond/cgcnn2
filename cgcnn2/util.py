@@ -339,7 +339,7 @@ def cgcnn_descriptor(
     loader: torch.utils.data.DataLoader,
     device: str,
     verbose: int,
-    return_nbr_filter_list=False
+    return_nbr_filter_list: bool = False
 ) -> tuple[list[float], list[torch.Tensor]]:
     """
     This function takes a pre-trained CGCNN model and a dataset, runs inference
