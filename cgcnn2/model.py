@@ -132,7 +132,8 @@ class CrystalGraphConvNet(nn.Module):
         atom_fea: torch.Tensor,
         nbr_fea: torch.Tensor,
         nbr_fea_idx: torch.LongTensor,
-        crystal_atom_idx: list[torch.LongTensor]
+        crystal_atom_idx: list[torch.LongTensor],
+        return_nbr_filter: bool = False
     ):
         """
         Forward pass
@@ -156,8 +157,11 @@ class CrystalGraphConvNet(nn.Module):
 
         """
         atom_fea = self.embedding(atom_fea)
+        nbr_filters = []
         for conv_func in self.convs:
-            atom_fea = conv_func(atom_fea, nbr_fea, nbr_fea_idx)
+            atom_fea, nbr_filter = conv_func(atom_fea, nbr_fea, nbr_fea_idx) # new added
+            if return_nbr_filter:
+                nbr_filters.append(nbr_filter)
         crys_fea = self.pooling(atom_fea, crystal_atom_idx)
         crys_fea = self.conv_to_fc(self.conv_to_fc_softplus(crys_fea))
         crys_fea = self.conv_to_fc_softplus(crys_fea)
@@ -169,7 +173,10 @@ class CrystalGraphConvNet(nn.Module):
         out = self.fc_out(crys_fea)
         if self.classification:
             out = self.logsoftmax(out)
-        return out, crys_fea
+        if return_nbr_filter:
+            return out, crys_fea, nbr_filters    # new added
+        else:
+            return out, crys_fea
 
     def pooling(
         self, atom_fea: torch.Tensor, crystal_atom_idx: list[torch.LongTensor]
