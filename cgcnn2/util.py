@@ -381,7 +381,7 @@ def cgcnn_descriptor(
             crystal_atom_idx = [idx_map.to(device) for idx_map in crystal_atom_idx]
             target = target.to(device)
 
-            output, crys_fea, nbr_filter = model(atom_fea, nbr_fea, nbr_fea_idx, crystal_atom_idx)
+            output, crys_fea, nbr_filter = model(atom_fea, nbr_fea, nbr_fea_idx, crystal_atom_idx, return_nbr_filter=True)
 
             targets_list.extend(target.cpu().numpy().ravel().tolist())
             outputs_list.extend(output.cpu().numpy().ravel().tolist())
